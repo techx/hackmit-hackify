@@ -1,28 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		<meta charset="utf-8">
-		<title>Hackify Picture</title>
-		<link href="css/styles.css" rel="stylesheet">
-		<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
-	</head>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Hackify Picture</title>
+    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/semantic.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:700' rel='stylesheet' type='text/css'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
 <body>
-	<h1>HACKIFY YOUR PICTURE</h1>
-	<script src="js/load_facebook.js"></script>
-	<div id="main-container">
-		<div id="fb-loggedout">
-			<button onclick="facebookLogin()">Login with Facebook</button>
-		</div>
-		<div id="fb-loggedin">
-			<canvas id="fb-img" width="500px" height="500px"></canvas>
-			<div id="dwdiv">
-				<a id="download" download="hackified.png">Download</a>
-			</div>
-		</div>
-	</div>
+  <script src="js/load_facebook.js"></script>
+
+  <div id="card">
+    <div class="container">
+      <div class="content">
+        <div class="ui segment">
+          <div id="#pic-container">
+            <img id="placeholder" src="hackgeneric.png">
+            <canvas id="fb-img" width="320px" height="320px"></canvas>
+          </div>
+          <div id="text">
+            <div id="title">
+              HACKIFY
+            </div>
+            <br>
+            <div id="fb-loggedout">
+              <button class="btn" onclick="facebookLogin()">Login with Facebook</button>
+            </div>
+            <br> <br>
+            <div id="fb-loggedin">
+              <a id="download" class="btn blue" download="hackified.png">Download</a>
+            </div>
+            <br>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
 
 <script src="js/jquery-2.1.1.min.js"></script>
-<script src="js/main.js"></script>
