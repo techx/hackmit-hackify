@@ -49,7 +49,8 @@ function loadFBProfileImage(fbid) {
     }
   }
   var newimage = new Image();
-  newimage.src = 'http://localhost/hackoverlay.png'
+  newimage.crossOrigin = "Anonymous";
+  newimage.src = '/hackoverlay.png'
   newimage.onload = function () {
     ctx.globalCompositeOperation = "overlay"
     ctx.drawImage(newimage, 0, 0, canvas.width, canvas.height)
