@@ -1,2 +1,2 @@
 # hackmit-hackify
-Hackify people's your picture!
+Hackify your Facebook profile picture!
