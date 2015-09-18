@@ -1,0 +1,77 @@
+#main-container {
+	text-align: center;
+}
+
+#download {
+	cursor: pointer;
+}
+
+#download:hover {
+	color: grey;
+}
+
+body, html {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	background: #473899;
+}
+
+div {
+	overflow: hidden;;
+}
+
+button {
+	font-family: 'Montserrat', sans-serif;
+	box-shadow: none;
+	border: none;
+	background: none;
+	color: #FFF;
+	font-size: 20px;
+	border-radius: 10px;
+	border: 2px solid #FFF;
+	padding: 10px;
+}
+
+a {
+	padding: 20px;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 40px;
+	color: #FFF;
+}
+
+a:hover {
+	color: #e76482 !important;
+}
+
+canvas {
+	border: 3px solid #e76482;
+	margin-top: 50px;
+}
+
+button:hover {
+	background: #FFF;
+	color: #473899;
+}
+
+h1 {
+	font-family: 'Montserrat', sans-serif;
+	color: white;
+	width: 100%;
+	padding: 0;
+	text-align: center;
+	margin-right: 0;
+	margin-left: 0;
+	margin-top: 50px;
+	font-size: 50px;
+}
+
+#dwdiv {
+	margin: 15px;
+}
+
+canvas {
+	width: 500px;
+	height: 500px;
+}
