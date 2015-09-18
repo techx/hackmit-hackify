@@ -10,12 +10,13 @@
 	color: grey;
 }
 
-body, html {
+body {
 	width: 100%;
 	height: 100%;
 	margin: 0;
 	padding: 0;
-	background: #473899;
+	background: url('https://s3.amazonaws.com/hackmit-assets/tintedphoto_1920_1080_low.jpg') no-repeat;
+	background-size: cover;
 }
 
 div {
@@ -46,9 +47,13 @@ a:hover {
 }
 
 canvas {
-	border: 3px solid #e76482;
+	border: 5px solid #e76482;
 	margin-top: 50px;
+	background-size: cover;
+	padding: 0;
+	background: #EEE;
 }
+
 
 button:hover {
 	background: #FFF;
