@@ -1,82 +1,146 @@
-#main-container {
-	text-align: center;
+canvas {
+	width: 320px;
+	height: 320px;
 }
 
-#download {
-	cursor: pointer;
-}
-
-#download:hover {
-	color: grey;
-}
-
+/* Pink #e76482 */
 body {
-	width: 100%;
-	height: 100%;
-	margin: 0;
-	padding: 0;
-	background: url('https://s3.amazonaws.com/hackmit-assets/tintedphoto_1920_1080_low.jpg') no-repeat;
-	background-size: cover;
+  margin: 0px auto;
+  font-family: "Montserrat", sans-serif
 }
 
-div {
-	overflow: hidden;;
+#fb-btn {
+    text-align: center;
 }
 
-button {
-	font-family: 'Montserrat', sans-serif;
-	box-shadow: none;
+#fb {
+  display: none;
+}
+
+#card {
+  background: url('https://s3.amazonaws.com/hackmit-assets/tintedphoto_1920_1080_low.jpg');
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+}
+
+#card > .container {
+  position: relative;
+  top: 50%;
+
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+#card > .container > .content {
+  width: 320px;
+  margin: 0 auto;
+}
+
+#card .segment {
+  padding: 0;
+  border-width: 0;
+  overflow: hidden;
+}
+
+#loading {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+
+  transition-duration: .5s;
+  opacity: 1;
+}
+
+#loading.hidden {
+  opacity: 0;
+}
+
+#pic-container {
+  position: relative;
+  width: 320px;
+  height: 320px;
+  text-align: center;
+  background: url(/assets/hackers.png);
+  background-size: cover;
+  border-bottom: 1px solid rgba(0,0,0,.15);
+}
+
+#profile-pic {
+  opacity: 1;
+  transition-duration: 1s;
+  width: 100%;
+}
+
+#profile-pic.hidden {
+  opacity: 0;
+}
+
+#pic-container .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /*background: red;*/
+}
+
+#text {
+  padding: 16px;
+  text-align: center;
+}
+
+#title, #subtitle {
+  font-family: 'Montserrat', 'Helvetica', sans-serif;
+  letter-spacing: 5.5px;
+  font-weight: 700;
+  text-align: center;
+  color: #473899;
+}
+
+#placeholder {
+	height: 320px;
+	width: 320px;
+	position: absolute;
+}
+
+#title {
+  font-size: 2.5em;
+  margin: 24px 0 18px;
+}
+
+#subtitle {
+  font-size: 1.5em;
+  letter-spacing: 5.5px;
+  margin-bottom: 20px;
+}
+
+#text p {
+  font-weight: 300;
+  padding: 4px;
+  font-size: 1.25em;
+  margin-bottom: 0;
+}
+
+#info {
+  margin-bottom: 12px;
+}
+
+.btn {
+	background: #e76482;
 	border: none;
-	background: none;
-	color: #FFF;
-	font-size: 20px;
-	border-radius: 10px;
-	border: 2px solid #FFF;
-	padding: 10px;
+	color: white !important;
+	font-size: 1.2em;
+	padding: 12px 24px;
 }
 
-a {
-	padding: 20px;
-	font-family: 'Montserrat', sans-serif;
-	font-size: 40px;
-	color: #FFF;
-}
-
-a:hover {
-	color: #e76482 !important;
-}
-
-canvas {
-	border: 5px solid #e76482;
-	margin-top: 50px;
-	background-size: cover;
-	padding: 0;
-	background: #EEE;
-}
-
-
-button:hover {
-	background: #FFF;
-	color: #473899;
-}
-
-h1 {
-	font-family: 'Montserrat', sans-serif;
-	color: white;
-	width: 100%;
-	padding: 0;
-	text-align: center;
-	margin-right: 0;
-	margin-left: 0;
-	margin-top: 50px;
-	font-size: 50px;
-}
-
-#dwdiv {
-	margin: 15px;
-}
-
-canvas {
-	width: 500px;
-	height: 500px;
+.btn.blue {
+	background: #4c82cc;
 }
