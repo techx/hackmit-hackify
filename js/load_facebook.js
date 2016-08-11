@@ -32,15 +32,12 @@ function loadFBProfileImage(fbid) {
 	var canvas = $('#fb-img').get(0);
 	var ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.globalCompositeOperation = "soft-light";
   var image = new Image();
   image.crossOrigin = "Anonymous";
   image.src = "http://graph.facebook.com/" + fbid + "/picture?width=320&height=320";
   image.onload = function() {
     $('#placeholder').fadeOut();
     ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#362487";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
     if (loadeds[1]) {
       var img = canvas.toDataURL('image/png');
       $("#download").attr("href", img);
@@ -64,15 +61,3 @@ function loadFBProfileImage(fbid) {
     }
   };
 }
-/*
-function processNewImage() {
-	var canvas = $('#fb-img').get(0);
-	var ctx = canvas.getContext('2d');
-
-	ctx.globalCompositeOperation = 'soft-light';
-	var hack_img = $('#hack-overlay').get(0);
-	ctx.drawImage(hack_img,0,0);
-	$('#download').on('click', function(){
-		this.href = canvas.toDataURL();
-	});
-}*/

@@ -18,7 +18,7 @@ body {
 }
 
 #card {
-  background: url('https://s3.amazonaws.com/hackmit-assets/tintedphoto_1920_1080_low.jpg');
+  background: url('https://hackmit.org/assets/images/paper.jpg');
   background-size: cover;
   height: 100%;
   width: 100%;
@@ -42,6 +42,7 @@ body {
   padding: 0;
   border-width: 0;
   overflow: hidden;
+  box-shadow: 0 0px 10px #888888;
 }
 
 #loading {
@@ -102,7 +103,7 @@ body {
   letter-spacing: 5.5px;
   font-weight: 700;
   text-align: center;
-  color: #473899;
+  color: #0b3b4b;
 }
 
 #placeholder {
