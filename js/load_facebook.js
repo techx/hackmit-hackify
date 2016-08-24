@@ -34,30 +34,18 @@ function loadFBProfileImage(fbid) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   var image = new Image();
   image.crossOrigin = "Anonymous";
-  image.src = "http://graph.facebook.com/" + fbid + "/picture?width=320&height=320";
+  image.src = 'hackoverlay.png';
   image.onload = function() {
     $('#placeholder').fadeOut();
     ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-    if (loadeds[1]) {
-      var img = canvas.toDataURL('image/png');
-      $("#download").attr("href", img);
-    }
-    else {
-      loadeds[0] = true;
-    }
-  };
-  var newimage = new Image();
-  newimage.crossOrigin = "Anonymous";
-  newimage.src = 'hackoverlay.png';
-  newimage.onload = function () {
-    ctx.globalCompositeOperation = "overlay";
-    ctx.drawImage(newimage, 0, 0, canvas.width, canvas.height);
-    if (loadeds[0]) {
-      var img = canvas.toDataURL('image/png');
-      $("#download").attr("href", img);
-    }
-    else {
-      loadeds[1] = true;
-    }
+    var newimage = new Image();
+    newimage.crossOrigin = "Anonymous";
+    newimage.src = "http://graph.facebook.com/" + fbid + "/picture?width=320&height=320";
+    newimage.onload = function () {
+        ctx.globalCompositeOperation = "overlay";
+        ctx.drawImage(newimage, 0, 0, canvas.width, canvas.height);
+            var img = canvas.toDataURL('image/png');
+            $("#download").attr("href", img);
+        };
   };
 }
