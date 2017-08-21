@@ -1,6 +1,6 @@
 canvas {
-	width: 320px;
-	height: 320px;
+	width: 400px;
+	height: 400px;
 }
 
 /* Pink #e76482 */
@@ -29,12 +29,12 @@ body {
   top: 50%;
 
   -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+          transform: translateY(-50%);
 }
 
 #card > .container > .content {
-  width: 320px;
+  width: 400px;
   margin: 0 auto;
 }
 
@@ -65,8 +65,8 @@ body {
 
 #pic-container {
   position: relative;
-  width: 320px;
-  height: 320px;
+  width: 400px;
+  height: 400px;
   text-align: center;
   background: url(/assets/hackers.png);
   background-size: cover;
@@ -100,18 +100,18 @@ body {
 #title, #subtitle {
   font-family: 'Montserrat', 'Helvetica', sans-serif;
   letter-spacing: 5.5px;
-  font-weight: 700;
   text-align: center;
-  color: #473899;
+  color: #252C37;
 }
 
 #placeholder {
-	height: 320px;
-	width: 320px;
-	position: absolute;
+  height: 400px;
+  width: 400px;
+  position: absolute;
 }
 
 #title {
+  font-weight: 700;
   font-size: 2.5em;
   margin: 24px 0 18px;
 }
@@ -127,20 +127,29 @@ body {
   padding: 4px;
   font-size: 1.25em;
   margin-bottom: 0;
+  color: #515B6B;
 }
 
 #info {
   margin-bottom: 12px;
 }
 
-.btn {
-	background: #e76482;
+.ui.button {
+	background: #FF585D;
 	border: none;
 	color: white !important;
 	font-size: 1.2em;
 	padding: 12px 24px;
 }
 
-.btn.blue {
+.ui.button:hover {
+  background-color: #ff7a7a;
+}
+
+.ui.button:active {
+  background-color: #F8B1B1;
+}
+
+.ui.button.blue {
 	background: #4c82cc;
 }
