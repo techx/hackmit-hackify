@@ -48,17 +48,34 @@
                             yourself 😎
                         </p>
                     </div>
-                    <br>
-                    <div class="ui three buttons">
+
+                    <div class="ui form" id="faction-form">
+                        <div class="inline fields">
+                            <label>Faction</label>
+                            <div class="field">
+                                <div class="ui radio checkbox">
+                                    <input type="radio" id="faction-blue" name="faction" value="#1897ea" />
+                                    <label for="faction-blue">Blue</label>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui radio checkbox">
+                                    <input type="radio" checked id="faction-red" name="faction" value="#FF585D" />
+                                    <label for="faction-red">Red</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="load-buttons" class="ui three buttons">
                         <button id="facebook-init" class="ui button">Login with Facebook</button>
                         <div class="or"></div>
                         <button id="webcam-init" class="ui button">Use webcam</button>
                     </div>
-                    <br> <br>
-                    <div id="fb-loggedin">
-                        <a id="download" class="ui primary button" download="hackified.png">Download</a>
+
+                    <div class="ui one buttons">
+                        <a id="download" class="fluid ui primary button" download="hackified.png">Download</a>
                     </div>
-                    <br>
                 </div>
             </div>
         </div>
