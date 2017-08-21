@@ -1,63 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <title>Hackify Picture</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
     <link href="css/styles.css" rel="stylesheet">
-    <link href="css/semantic.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Montserrat:700' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
 
     <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-      ga('create', 'UA-63828172-11', 'auto');
-      ga('send', 'pageview');
+        ga('create', 'UA-63828172-11', 'auto');
+        ga('send', 'pageview');
 
     </script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-  </head>
+</head>
 <body>
-  <script src="js/load_facebook.js"></script>
-
-  <div id="card">
+<div id="card">
     <div class="container">
-      <div class="content">
-        <div class="ui segment">
-          <div id="#pic-container">
-            <img id="placeholder" src="hackgeneric.png">
-            <canvas id="fb-img" width="320px" height="320px"></canvas>
-          </div>
-          <div id="text">
-            <div id="title">
-              HACKIFY
+        <div class="content">
+            <div class="ui segment">
+                <div id="#pic-container">
+                    <img id="placeholder" src="assets/hackgeneric.png">
+                    <canvas id="fb-img" width="320px" height="320px"></canvas>
+                </div>
+                <div id="text">
+                    <div id="title">
+                        HACKIFY
+                    </div>
+                    <div id="info">
+                        <p>
+                            Don't worry, this won't change your profile picture. You will have to download it and set it
+                            yourself 😎
+                        </p>
+                    </div>
+                    <br>
+                    <div>
+                        <button id="facebook-init" class="btn">Login with Facebook</button>
+                    </div>
+                    <br> <br>
+                    <div id="fb-loggedin">
+                        <a id="download" class="btn blue" download="hackified.png">Download</a>
+                    </div>
+                    <br>
+                </div>
             </div>
-            <div id="info">
-              <p>
-              Don't worry, this won't change your profile picture. You will have to download it and set it yourself 😎
-              </p>
-            </div>
-            <br>
-            <div id="fb-loggedout">
-              <button class="btn" onclick="facebookLogin()">Login with Facebook</button>
-            </div>
-            <br> <br>
-            <div id="fb-loggedin">
-              <a id="download" class="btn blue" download="hackified.png">Download</a>
-            </div>
-            <br>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
+</div>
 
+<script>
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '1824906477822367',
+            xfbml: true,
+            version: 'v2.10'
+        });
+        FB.AppEvents.logPageView();
+    };
+
+    (function (d, s, id) {
+        let js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+<script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
+<script src="build/babel-polyfill.min.js"></script>
+<script src="build/main.js"></script>
 </body>
 </html>
-
-<script src="js/jquery-2.1.1.min.js"></script>
