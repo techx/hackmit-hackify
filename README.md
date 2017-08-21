@@ -2,8 +2,8 @@
 Hackify your Facebook profile picture!
 
 ## Development
-Before editing files in `/js`:
 ```
+npm install
 npm run dev
 ```
 
