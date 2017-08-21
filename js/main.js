@@ -29,6 +29,20 @@ class ImageLoader {
             });
         });
     }
+
+    static fromWebcam() {
+        return new Promise((resolve, reject) => {
+            navigator.getUserMedia({ video: true, audio: false }, stream => {
+                let video = document.createElement('video');
+                video.setAttribute("autoplay", true);
+                video.src = window.URL.createObjectURL(stream);
+                video.addEventListener('loadedmetadata', () => resolve(video));
+            }, e => {
+                console.error('Webcam permissions request rejected!', e);
+                reject(e);
+            });
+        });
+    }
 }
 
 class Rect {
@@ -65,6 +79,7 @@ class Rendering {
     }
 
     clear() {
+        this.ctx.globalCompositeOperation = "source-over";
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
@@ -95,17 +110,48 @@ class Rendering {
     }
 }
 
-$("#facebook-init").click(async (el) => {
+async function facebookInit() {
     let render = new Rendering();
 
     const profilePicture = await ImageLoader.fromFacebook();
     render.drawImage(profilePicture);
 
-    const logo = await ImageLoader.fromURL("assets/hackoverlay.png");
+    const color = $("input[name=faction]:checked").val();
+
     // const cornerRect = Rect.fromPercents(render.canvas.width, render.canvas.height, 0.75, 0.75, 0.2, 0.2);
+    const logo = await ImageLoader.fromURL("assets/hackoverlay.png");
     render.drawImage(logo, {globalCompositeOperation: "overlay"});
-    render.fillRect({globalCompositeOperation: "soft-light"});
+    render.fillRect({color: color, globalCompositeOperation: "color"});
 
     $("#download").attr("href", render.toDataURL());
     $('#placeholder').fadeOut();
-});
+    $('#load-buttons').fadeOut();
+
+    // Rerun function if the user toggles their faction
+    $("input[name=faction]").off("change").change(facebookInit);
+}
+
+async function webcamInit() {
+    let video = await ImageLoader.fromWebcam();
+    const logo = await ImageLoader.fromURL("assets/hackoverlay.png");
+
+    let render = new Rendering();
+    function frameLoop() {
+        const color = $("input[name=faction]:checked").val();
+
+        render.clear();
+        render.drawImage(video);
+        render.drawImage(logo, {globalCompositeOperation: "overlay"});
+        render.fillRect({color: color, globalCompositeOperation: "color"});
+
+        $("#download").attr("href", render.toDataURL());
+        requestAnimationFrame(frameLoop);
+    }
+
+    requestAnimationFrame(frameLoop);
+    $('#placeholder').fadeOut();
+    $('#load-buttons').fadeOut();
+}
+
+$("#facebook-init").click(facebookInit);
+$('#webcam-init').click(webcamInit);

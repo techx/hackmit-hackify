@@ -134,6 +134,10 @@ body {
   margin-bottom: 12px;
 }
 
+#load-buttons {
+  margin-bottom: 15px;
+}
+
 .ui.button {
 	background: #FF585D;
 	border: none;
