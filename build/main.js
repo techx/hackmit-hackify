@@ -4,7 +4,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var facebookInit = function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var render, profilePicture, color, logo;
+        var render, profilePicture, logo, cornerRect;
         return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
                 switch (_context.prev = _context.next) {
@@ -15,25 +15,20 @@ var facebookInit = function () {
 
                     case 3:
                         profilePicture = _context.sent;
-
-                        render.drawImage(profilePicture);
-
-                        color = $("input[name=faction]:checked").val();
-
-                        // const cornerRect = Rect.fromPercents(render.canvas.width, render.canvas.height, 0.75, 0.75, 0.2, 0.2);
-
-                        _context.next = 8;
+                        _context.next = 6;
                         return ImageLoader.fromURL("assets/hackoverlay.png");
 
-                    case 8:
+                    case 6:
                         logo = _context.sent;
+                        cornerRect = Rect.fromPercents(render.canvas.width, render.canvas.height, 0.75, 0.75, 0.2, 0.2);
 
-                        render.drawImage(logo, { globalCompositeOperation: "overlay" });
-                        render.fillRect({ color: color, globalCompositeOperation: "color" });
-                        // render.fillRect({color: "#1897ea", globalCompositeOperation: "color"});
-                        // render.fillRect({color: "#FF585D", globalCompositeOperation: "color"});
+
+                        render.drawImage(profilePicture);
+                        render.redBlueFilter(1.023, 40);
+                        render.drawImage(logo, { rect: cornerRect });
 
                         $("#download").attr("href", render.toDataURL());
+
                         $('#placeholder').fadeOut();
                         $('#load-buttons').fadeOut();
 
@@ -55,20 +50,17 @@ var facebookInit = function () {
 
 var webcamInit = function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-        var video, logo, render, frameLoop;
+        var video, render, logo, cornerRect, frameLoop;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
             while (1) {
                 switch (_context2.prev = _context2.next) {
                     case 0:
                         frameLoop = function frameLoop() {
-                            var color = $("input[name=faction]:checked").val();
-
                             render.clear();
                             render.drawImage(video);
-                            render.drawImage(logo, { globalCompositeOperation: "overlay" });
-                            render.fillRect({ color: color, globalCompositeOperation: "color" });
+                            render.redBlueFilter(1.023, 40);
+                            render.drawImage(logo, { globalCompositeOperation: "overlay", rect: cornerRect });
 
-                            $("#download").attr("href", render.toDataURL());
                             requestAnimationFrame(frameLoop);
                         };
 
@@ -77,19 +69,25 @@ var webcamInit = function () {
 
                     case 3:
                         video = _context2.sent;
-                        _context2.next = 6;
+                        render = new Rendering();
+                        _context2.next = 7;
                         return ImageLoader.fromURL("assets/hackoverlay.png");
 
-                    case 6:
+                    case 7:
                         logo = _context2.sent;
-                        render = new Rendering();
+                        cornerRect = Rect.fromPercents(render.canvas.width, render.canvas.height, 0.75, 0.03, 0.22, 0.22); // top right corner
 
+                        // TODO: Test downloading image on mobile
+                        $("#download").mouseenter(function () {
+                            $("#download").attr("href", render.toDataURL());
+                        });
 
                         requestAnimationFrame(frameLoop);
-                        $('#placeholder').fadeOut();
-                        $('#load-buttons').fadeOut();
 
-                    case 11:
+                        $("#placeholder").fadeOut();
+                        $("#load-buttons").fadeOut();
+
+                    case 13:
                     case "end":
                         return _context2.stop();
                 }
@@ -196,13 +194,42 @@ var Rect = function () {
     return Rect;
 }();
 
+var Util = {
+    c1: document.createElement("canvas"),
+    c2: document.createElement("canvas"),
+
+    rescale: function rescale(imageData, fx, fy) {
+        // Rescale image by fx, fy from the top left corner. Retains original size.
+        var ctx1 = this.c1.getContext("2d");
+        var ctx2 = this.c2.getContext("2d");
+
+        this.c1.width = imageData.width;
+        this.c1.height = imageData.height;
+        ctx1.putImageData(imageData, 0, 0);
+
+        this.c2.width = fx * imageData.width;
+        this.c2.height = fy * imageData.height;
+        ctx2.scale(fx, fy);
+        ctx2.drawImage(this.c1, 0, 0);
+
+        return ctx2.getImageData(0, 0, imageData.width, imageData.height);
+    }
+};
+
 var Rendering = function () {
     function Rendering() {
         _classCallCheck(this, Rendering);
 
-        this.canvas = $('#fb-img').get(0);
+        this.canvas = document.getElementById("fb-img");
         this.ctx = this.canvas.getContext('2d');
         this.defaultRect = new Rect(0, 0, this.canvas.width, this.canvas.height);
+
+        // For the red/blue filter
+        var length = this.canvas.width * this.canvas.height * 4;
+        this.red = new ImageData(new Uint8ClampedArray(length), this.canvas.width, this.canvas.height);
+        this.blue = new ImageData(new Uint8ClampedArray(length), this.canvas.width, this.canvas.height);
+        this.blended = new ImageData(new Uint8ClampedArray(length), this.canvas.width, this.canvas.height);
+
         this.clear();
     }
 
@@ -252,6 +279,40 @@ var Rendering = function () {
             this.ctx.fillRect(x, y, width, height);
         }
     }, {
+        key: "redBlueFilter",
+        value: function redBlueFilter(redScale, clipLower) {
+            var image = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+
+            for (var i = 0; i < image.data.length; i += 4) {
+                var grayValue = (image.data[i] + image.data[i + 1] + image.data[i + 2]) / 765.0; // divide by 255 * 3
+
+                // Red grad map
+                this.red.data[i] = 37 * (1 - grayValue) + 255 * grayValue;
+                this.red.data[i + 1] = 44 * (1 - grayValue) + 88 * grayValue;
+                this.red.data[i + 2] = 55 * (1 - grayValue) + 93 * grayValue;
+                this.red.data[i + 3] = 255;
+
+                // Blue grad map
+                this.blue.data[i] = 37 * (1 - grayValue) + 116 * grayValue;
+                this.blue.data[i + 1] = 44 * (1 - grayValue) + 209 * grayValue;
+                this.blue.data[i + 2] = 55 * (1 - grayValue) + 234 * grayValue;
+            }
+
+            // Resize red map
+            this.red = Util.rescale(this.red, redScale, redScale);
+
+            // Blend maps by lightening + clip colors to clipLower
+            for (var _i = 0; _i < this.blended.data.length; _i += 4) {
+                this.blended.data[_i] = Math.max(this.red.data[_i], this.blue.data[_i], clipLower);
+                this.blended.data[_i + 1] = Math.max(this.red.data[_i + 1], this.blue.data[_i + 1], clipLower);
+                this.blended.data[_i + 2] = Math.max(this.red.data[_i + 2], this.blue.data[_i + 2], clipLower);
+                this.blended.data[_i + 3] = 255; // Set alpha to 255
+            }
+
+            // Copy result to canvas
+            this.ctx.putImageData(this.blended, 0, 0);
+        }
+    }, {
         key: "toDataURL",
         value: function toDataURL() {
             return this.canvas.toDataURL('image/png');
@@ -261,6 +322,6 @@ var Rendering = function () {
     return Rendering;
 }();
 
-$("#facebook-init").click(facebookInit);
-$('#webcam-init').click(webcamInit);
+document.getElementById('facebook-init').onclick = facebookInit;
+document.getElementById('webcam-init').onclick = webcamInit;
 //# sourceMappingURL=main.js.map
