@@ -178,11 +178,15 @@ async function facebookInit() {
     const profilePicture = await ImageLoader.fromFacebook();
 
     const logo = await ImageLoader.fromURL("assets/hackoverlay.png");
-    const cornerRect = Rect.fromPercents(render.canvas.width, render.canvas.height, 0.75, 0.75, 0.2, 0.2);
+    const cornerRect = Rect.fromPercents(
+        render.canvas.width,
+        render.canvas.height,
+        0.75, 0.02,
+        0.22, 0.22); // top right corner
 
     render.drawImage(profilePicture);
     render.redBlueFilter(1.023, 40);
-    render.drawImage(logo, {rect: cornerRect});
+    render.drawImage(logo, {globalCompositeOperation: "soft-light", rect: cornerRect});
 
     $("#download").attr("href", render.toDataURL());
 
@@ -202,14 +206,14 @@ async function webcamInit() {
     const cornerRect = Rect.fromPercents(
         render.canvas.width,
         render.canvas.height,
-        0.75, 0.03,
+        0.75, 0.02,
         0.22, 0.22); // top right corner
 
     function frameLoop() {
         render.clear();
         render.drawImage(video);
         render.redBlueFilter(1.023, 40);
-        render.drawImage(logo, {globalCompositeOperation: "overlay", rect: cornerRect});
+        render.drawImage(logo, {globalCompositeOperation: "soft-light", rect: cornerRect});
 
         requestAnimationFrame(frameLoop);
     }

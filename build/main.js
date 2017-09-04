@@ -20,12 +20,11 @@ var facebookInit = function () {
 
                     case 6:
                         logo = _context.sent;
-                        cornerRect = Rect.fromPercents(render.canvas.width, render.canvas.height, 0.75, 0.75, 0.2, 0.2);
-
+                        cornerRect = Rect.fromPercents(render.canvas.width, render.canvas.height, 0.75, 0.02, 0.22, 0.22); // top right corner
 
                         render.drawImage(profilePicture);
                         render.redBlueFilter(1.023, 40);
-                        render.drawImage(logo, { rect: cornerRect });
+                        render.drawImage(logo, { globalCompositeOperation: "soft-light", rect: cornerRect });
 
                         $("#download").attr("href", render.toDataURL());
 
@@ -59,7 +58,7 @@ var webcamInit = function () {
                             render.clear();
                             render.drawImage(video);
                             render.redBlueFilter(1.023, 40);
-                            render.drawImage(logo, { globalCompositeOperation: "overlay", rect: cornerRect });
+                            render.drawImage(logo, { globalCompositeOperation: "soft-light", rect: cornerRect });
 
                             requestAnimationFrame(frameLoop);
                         };
@@ -75,7 +74,7 @@ var webcamInit = function () {
 
                     case 7:
                         logo = _context2.sent;
-                        cornerRect = Rect.fromPercents(render.canvas.width, render.canvas.height, 0.75, 0.03, 0.22, 0.22); // top right corner
+                        cornerRect = Rect.fromPercents(render.canvas.width, render.canvas.height, 0.75, 0.02, 0.22, 0.22); // top right corner
 
                         // TODO: Test downloading image on mobile
                         $("#download").mouseenter(function () {
