@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <title>Hackify Picture</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/components/modal.min.css">
     <link href="css/styles.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Montserrat:700' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
@@ -30,13 +31,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
+
+<div class="ui modal" id="shareModal">
+    <i class="close icon"></i>
+    <div class="header">
+        You've been hackified!
+    </div>
+    <div class="image content">
+        <img alt="Hackified picture" class="image">
+        <div class="description">
+            Download this picture below!
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui button">Unhackify me!</div>
+        <a class="ui button positive" id="download" download="hackified.png">Download</a>
+    </div>
+</div>
+
 <div id="card">
     <div class="container">
         <div class="content">
             <div class="ui segment">
-                <div id="#pic-container">
+                <div id="pic-container">
                     <img id="placeholder" src="assets/hackgeneric.png">
-                    <canvas id="fb-img" width="320px" height="320px"></canvas>
+                    <canvas id="fb-img"></canvas>
+                    <div id="timer">
+                        <h1>10</h1>
+                    </div>
                 </div>
                 <div id="text">
                     <div id="title">
@@ -55,8 +77,9 @@
                         <button id="webcam-init" class="ui button">Use webcam</button>
                     </div>
 
-                    <div class="ui one buttons">
-                        <a id="download" class="fluid ui primary button" download="hackified.png">Download</a>
+                    <div id="capture-buttons" class="ui two buttons">
+                        <a id="capture-now" class="fluid ui primary button">Capture</a>
+                        <a id="capture-10" class="fluid ui primary button">Capture (10 s)</a>
                     </div>
                 </div>
             </div>
@@ -90,6 +113,7 @@
         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/components/modal.min.js"></script>
 <script src="build/babel-polyfill.min.js"></script>
 <script src="build/main.js"></script>
 </body>

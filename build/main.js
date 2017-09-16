@@ -4,37 +4,42 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var facebookInit = function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var render, profilePicture, logo, cornerRect;
+        var canvas, render, profilePicture, logo;
         return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
                 switch (_context.prev = _context.next) {
                     case 0:
-                        render = new Rendering();
-                        _context.next = 3;
+                        canvas = document.getElementById("fb-img");
+                        render = new Rendering(canvas, 320, 320);
+                        _context.next = 4;
                         return ImageLoader.fromFacebook();
 
-                    case 3:
+                    case 4:
                         profilePicture = _context.sent;
-                        _context.next = 6;
+                        _context.next = 7;
                         return ImageLoader.fromURL("assets/hackoverlay.png");
 
-                    case 6:
+                    case 7:
                         logo = _context.sent;
-                        cornerRect = Rect.fromPercents(render.canvas.width, render.canvas.height, 0.75, 0.02, 0.22, 0.22); // top right corner
+
+                        Rect.fromPercents(render.canvas.width, render.canvas.height, 0.75, 0.02, 0.22, 0.22); // top right corner
 
                         render.drawImage(profilePicture);
                         render.redBlueFilter(1.023, 40);
-                        render.drawImage(logo, { globalCompositeOperation: "soft-light", rect: cornerRect });
+                        render.drawImage(logo, { globalCompositeOperation: "overlay", rect: cornerRect });
 
-                        $("#download").attr("href", render.toDataURL());
+                        $("#placeholder").fadeOut();
+                        $("#load-buttons").fadeOut();
 
-                        $('#placeholder').fadeOut();
-                        $('#load-buttons').fadeOut();
+                        $("#capture-now").click(function () {
+                            return shareCanvas(render.toDataURL());
+                        });
+                        $("#capture-now").fadeIn();
 
                         // Rerun function if the user toggles their faction
                         $("input[name=faction]").off("change").change(facebookInit);
 
-                    case 15:
+                    case 17:
                     case "end":
                         return _context.stop();
                 }
@@ -49,7 +54,7 @@ var facebookInit = function () {
 
 var webcamInit = function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-        var video, render, logo, cornerRect, frameLoop;
+        var video, canvas, render, logo, cornerRect, frameLoop;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
             while (1) {
                 switch (_context2.prev = _context2.next) {
@@ -57,8 +62,9 @@ var webcamInit = function () {
                         frameLoop = function frameLoop() {
                             render.clear();
                             render.drawImage(video);
-                            render.redBlueFilter(1.023, 40);
-                            render.drawImage(logo, { globalCompositeOperation: "soft-light", rect: cornerRect });
+                            render.redBlueFilter(1.023, 0);
+                            // render.fillRect({color: "rgb(200, 200, 200)", globalCompositeOperation: "soft-light"});
+                            render.drawImage(logo, { globalCompositeOperation: "overlay", rect: cornerRect });
 
                             requestAnimationFrame(frameLoop);
                         };
@@ -68,25 +74,34 @@ var webcamInit = function () {
 
                     case 3:
                         video = _context2.sent;
-                        render = new Rendering();
-                        _context2.next = 7;
+                        canvas = document.getElementById("fb-img");
+                        render = new Rendering(canvas, 440, 320);
+                        _context2.next = 8;
                         return ImageLoader.fromURL("assets/hackoverlay.png");
 
-                    case 7:
+                    case 8:
                         logo = _context2.sent;
-                        cornerRect = Rect.fromPercents(render.canvas.width, render.canvas.height, 0.75, 0.02, 0.22, 0.22); // top right corner
-
-                        // TODO: Test downloading image on mobile
-                        $("#download").mouseenter(function () {
-                            $("#download").attr("href", render.toDataURL());
-                        });
-
-                        requestAnimationFrame(frameLoop);
+                        cornerRect = new Rect(440 - 90, 10, 80, 80); // top right corner
 
                         $("#placeholder").fadeOut();
                         $("#load-buttons").fadeOut();
 
-                    case 13:
+                        $("#capture-now").click(function () {
+                            return shareCanvas(render.toDataURL());
+                        });
+
+                        $("#capture-10").click(function () {
+                            $("#timer").fadeIn();
+                            setTimer(function () {
+                                $("#timer").fadeOut();
+                                shareCanvas(render.toDataURL());
+                            }, 10);
+                        });
+                        $("#capture-buttons a").fadeIn();
+
+                        requestAnimationFrame(frameLoop);
+
+                    case 16:
                     case "end":
                         return _context2.stop();
                 }
@@ -125,11 +140,14 @@ var ImageLoader = function () {
     }, {
         key: "fromFacebook",
         value: function fromFacebook() {
+            var width = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 320;
+            var height = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 320;
+
             return new Promise(function (resolve, reject) {
                 FB.login(function (response) {
                     if (response.authResponse) {
                         FB.api('/me', function (response) {
-                            ImageLoader.fromURL("http://graph.facebook.com/" + response.id + "/picture?width=320&height=320").then(resolve);
+                            ImageLoader.fromURL("http://graph.facebook.com/" + response.id + "/picture?width=" + width + "&height=" + width).then(resolve);
                         });
                     } else {
                         console.log("User cancelled login or did not fully authorize.");
@@ -216,10 +234,15 @@ var Util = {
 };
 
 var Rendering = function () {
-    function Rendering() {
+    function Rendering(canvas, width, height) {
         _classCallCheck(this, Rendering);
 
-        this.canvas = document.getElementById("fb-img");
+        this.canvas = canvas;
+        this.canvas.width = width;
+        this.canvas.height = height;
+        this.canvas.style.width = width;
+        this.canvas.style.height = height;
+
         this.ctx = this.canvas.getContext('2d');
         this.defaultRect = new Rect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -321,6 +344,28 @@ var Rendering = function () {
     return Rendering;
 }();
 
+function setTimer(cb, seconds) {
+    $("#timer h1").text(seconds);
+
+    if (seconds > 0) {
+        setTimeout(function () {
+            return setTimer(cb, seconds - 1);
+        }, 1000);
+    } else {
+        cb();
+    }
+}
+
+function shareCanvas(imageDataURL) {
+    $("#shareModal .image").attr("src", imageDataURL);
+    $("#shareModal").modal("show");
+    $("#download").attr("href", imageDataURL);
+}
+
 document.getElementById('facebook-init').onclick = facebookInit;
 document.getElementById('webcam-init').onclick = webcamInit;
+
+$("document").ready(function () {
+    $('.ui.modal').modal();
+});
 //# sourceMappingURL=main.js.map

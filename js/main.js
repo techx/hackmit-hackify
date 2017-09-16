@@ -3,6 +3,8 @@ navigator.getUserMedia = navigator.getUserMedia ||
     navigator.mozGetUserMedia ||
     navigator.msGetUserMedia;
 
+
+
 class ImageLoader {
     static fromURL(url) {
         return new Promise((resolve, reject) => {
@@ -13,13 +15,13 @@ class ImageLoader {
         });
     }
 
-    static fromFacebook() {
+    static fromFacebook(width=320, height=320) {
         return new Promise((resolve, reject) => {
             FB.login(function (response) {
                 if (response.authResponse) {
                     FB.api('/me', function (response) {
                         ImageLoader
-                            .fromURL("http://graph.facebook.com/" + response.id + "/picture?width=320&height=320")
+                            .fromURL("http://graph.facebook.com/" + response.id + "/picture?width=" + width + "&height=" + width)
                             .then(resolve);
                     });
                 } else {
@@ -93,8 +95,13 @@ let Util = {
 };
 
 class Rendering {
-    constructor() {
-        this.canvas = document.getElementById("fb-img");
+    constructor(canvas, width, height) {
+        this.canvas = canvas;
+        this.canvas.width = width;
+        this.canvas.height = height;
+        this.canvas.style.width = width;
+        this.canvas.style.height = height;
+
         this.ctx = this.canvas.getContext('2d');
         this.defaultRect = new Rect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -172,13 +179,31 @@ class Rendering {
     }
 }
 
+function setTimer(cb, seconds) {
+    $("#timer h1").text(seconds);
+
+    if (seconds > 0) {
+        setTimeout(() => setTimer(cb, seconds - 1), 1000);
+    } else {
+        cb();
+    }
+}
+
+function shareCanvas(imageDataURL) {
+    $("#shareModal .image").attr("src", imageDataURL);
+    $("#shareModal")
+        .modal("show");
+    $("#download").attr("href", imageDataURL);
+}
+
 async function facebookInit() {
-    let render = new Rendering();
+    let canvas = document.getElementById("fb-img");
+    let render = new Rendering(canvas, 320, 320);
 
     const profilePicture = await ImageLoader.fromFacebook();
 
     const logo = await ImageLoader.fromURL("assets/hackoverlay.png");
-    const cornerRect = Rect.fromPercents(
+    Rect.fromPercents(
         render.canvas.width,
         render.canvas.height,
         0.75, 0.02,
@@ -186,12 +211,13 @@ async function facebookInit() {
 
     render.drawImage(profilePicture);
     render.redBlueFilter(1.023, 40);
-    render.drawImage(logo, {globalCompositeOperation: "soft-light", rect: cornerRect});
+    render.drawImage(logo, {globalCompositeOperation: "overlay", rect: cornerRect});
 
-    $("#download").attr("href", render.toDataURL());
+    $("#placeholder").fadeOut();
+    $("#load-buttons").fadeOut();
 
-    $('#placeholder').fadeOut();
-    $('#load-buttons').fadeOut();
+    $("#capture-now").click(() => shareCanvas(render.toDataURL()));
+    $("#capture-now").fadeIn();
 
     // Rerun function if the user toggles their faction
     $("input[name=faction]").off("change").change(facebookInit);
@@ -200,34 +226,42 @@ async function facebookInit() {
 async function webcamInit() {
     let video = await ImageLoader.fromWebcam();
 
-    let render = new Rendering();
+    let canvas = document.getElementById("fb-img");
+    let render = new Rendering(canvas, 440, 320);
 
     const logo = await ImageLoader.fromURL("assets/hackoverlay.png");
-    const cornerRect = Rect.fromPercents(
-        render.canvas.width,
-        render.canvas.height,
-        0.75, 0.02,
-        0.22, 0.22); // top right corner
+    const cornerRect = new Rect(440 - 90, 10, 80, 80); // top right corner
 
     function frameLoop() {
         render.clear();
         render.drawImage(video);
-        render.redBlueFilter(1.023, 40);
-        render.drawImage(logo, {globalCompositeOperation: "soft-light", rect: cornerRect});
+        render.redBlueFilter(1.023, 0);
+        // render.fillRect({color: "rgb(200, 200, 200)", globalCompositeOperation: "soft-light"});
+        render.drawImage(logo, {globalCompositeOperation: "overlay", rect: cornerRect});
 
         requestAnimationFrame(frameLoop);
     }
 
-    // TODO: Test downloading image on mobile
-    $("#download").mouseenter(() => {
-        $("#download").attr("href", render.toDataURL());
-    });
-
-    requestAnimationFrame(frameLoop);
-
     $("#placeholder").fadeOut();
     $("#load-buttons").fadeOut();
+
+    $("#capture-now").click(() => shareCanvas(render.toDataURL()));
+
+    $("#capture-10").click(() => {
+        $("#timer").fadeIn();
+        setTimer(() => {
+            $("#timer").fadeOut();
+            shareCanvas(render.toDataURL());
+        }, 10);
+    });
+    $("#capture-buttons a").fadeIn();
+
+    requestAnimationFrame(frameLoop);
 }
 
 document.getElementById('facebook-init').onclick = facebookInit;
 document.getElementById('webcam-init').onclick = webcamInit;
+
+$("document").ready(function() {
+    $('.ui.modal').modal();
+});

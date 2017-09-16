@@ -1,6 +1,5 @@
 canvas {
-	width: 400px;
-	height: 400px;
+	width: 100%;
 }
 
 /* Pink #e76482 */
@@ -65,12 +64,6 @@ body {
 
 #pic-container {
   position: relative;
-  width: 400px;
-  height: 400px;
-  text-align: center;
-  background: url(/assets/hackers.png);
-  background-size: cover;
-  border-bottom: 1px solid rgba(0,0,0,.15);
 }
 
 #profile-pic {
@@ -89,7 +82,6 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  /*background: red;*/
 }
 
 #text {
@@ -156,4 +148,33 @@ body {
 
 .ui.button.blue {
 	background: #4c82cc;
+}
+
+#capture-buttons a {
+  display: none;
+}
+
+#timer {
+  position: absolute;
+  left: calc(50% - 50px);
+  top: calc(50% - 50px);
+
+  display: block;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+
+  background-color: rgba(37, 44, 55, .75);
+  box-shadow: 0px 0px 10px 2px rgba(81, 91, 107, .75);
+}
+
+#timer {
+  display: none;
+}
+
+#timer h1 {
+  text-align: center;
+  margin-top: calc(100px/2 - 58px/2);
+  font-size: 45px;
+  color: rgba(255, 255, 255, 1);
 }
