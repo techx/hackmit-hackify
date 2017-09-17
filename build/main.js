@@ -4,7 +4,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var facebookInit = function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var canvas, render, profilePicture, logo, gaussianImage;
+        var canvas, render, profilePicture, logo, cornerRect, gaussianImage;
         return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
                 switch (_context.prev = _context.next) {
@@ -21,8 +21,8 @@ var facebookInit = function () {
 
                     case 7:
                         logo = _context.sent;
+                        cornerRect = Rect.fromPercents(render.canvas.width, render.canvas.height, 0.75, 0.02, 0.22, 0.22); // top right corner
 
-                        Rect.fromPercents(render.canvas.width, render.canvas.height, 0.75, 0.02, 0.22, 0.22); // top right corner
                         _context.next = 11;
                         return ImageLoader.fromURL("assets/gaussian-darker-medium.png");
 

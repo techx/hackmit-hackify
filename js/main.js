@@ -219,7 +219,7 @@ async function facebookInit() {
     const profilePicture = await ImageLoader.fromFacebook();
 
     const logo = await ImageLoader.fromURL("assets/hackoverlay.png");
-    Rect.fromPercents(
+    const cornerRect = Rect.fromPercents(
         render.canvas.width,
         render.canvas.height,
         0.75, 0.02,
