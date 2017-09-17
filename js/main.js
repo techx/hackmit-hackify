@@ -223,8 +223,9 @@ async function facebookInit() {
     $("#placeholder").fadeOut();
     $("#load-buttons").fadeOut();
 
-    $("#capture-now").click(() => shareCanvas(render.toDataURL()));
-    $("#capture-now").fadeIn();
+    $("#capture-now").text("Look good?")
+                     .click(() => shareCanvas(render.toDataURL()))
+                     .fadeIn();
 
     // Rerun function if the user toggles their faction
     $("input[name=faction]").off("change").change(facebookInit);

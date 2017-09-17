@@ -38,15 +38,14 @@ var facebookInit = function () {
                         $("#placeholder").fadeOut();
                         $("#load-buttons").fadeOut();
 
-                        $("#capture-now").click(function () {
+                        $("#capture-now").text("Look good?").click(function () {
                             return shareCanvas(render.toDataURL());
-                        });
-                        $("#capture-now").fadeIn();
+                        }).fadeIn();
 
                         // Rerun function if the user toggles their faction
                         $("input[name=faction]").off("change").change(facebookInit);
 
-                    case 21:
+                    case 20:
                     case "end":
                         return _context.stop();
                 }
