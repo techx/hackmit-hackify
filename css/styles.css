@@ -114,6 +114,10 @@ body {
   margin-bottom: 20px;
 }
 
+#text {
+  margin-top: 190px;
+}
+
 #text p {
   font-weight: 300;
   padding: 4px;
@@ -150,6 +154,10 @@ body {
 	background: #4c82cc;
 }
 
+#capture-buttons {
+  margin-top: 10px;
+}
+
 #capture-buttons a {
   display: none;
 }
@@ -177,4 +185,8 @@ body {
   margin-top: calc(100px/2 - 58px/2);
   font-size: 45px;
   color: rgba(255, 255, 255, 1);
+}
+
+#shareModal img {
+  margin: 0px auto 0px auto;
 }

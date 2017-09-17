@@ -174,6 +174,22 @@ class Rendering {
         this.ctx.putImageData(this.blended, 0, 0);
     }
 
+    addVignette(gaussianImage) {
+        // let w = this.canvas.width;
+        // let h = this.canvas.height;
+        // let outerRadius = w * .5;
+        // let innerRadius = w * .2;
+        // let grd = this.ctx.createRadialGradient(w / 2, h / 2, innerRadius, w / 2, h / 2, outerRadius);
+        // // light blue
+        // grd.addColorStop(0, 'rgba(0,0,0,0)');
+        // // dark blue
+        // grd.addColorStop(1, 'rgba(0,0,0,' + alpha + ')');
+        // this.ctx.fillStyle = grd;
+        // this.ctx.fill();
+        let rect = Rect.fromPercents(this.canvas.width, this.canvas.height, -.1125, -.1125, 1.25, 1.25);
+        this.drawImage(gaussianImage, {globalCompositeOperation: "", rect: rect});
+    }
+
     toDataURL() {
         return this.canvas.toDataURL('image/png');
     }
@@ -182,7 +198,7 @@ class Rendering {
 function setTimer(cb, seconds) {
     $("#timer h1").text(seconds);
 
-    if (seconds > 0) {
+    if (secondbottoms > 0) {
         setTimeout(() => setTimer(cb, seconds - 1), 1000);
     } else {
         cb();
@@ -208,9 +224,11 @@ async function facebookInit() {
         render.canvas.height,
         0.75, 0.02,
         0.22, 0.22); // top right corner
+    const gaussianImage = await ImageLoader.fromURL("assets/gaussian-darker-medium.png");
 
     render.drawImage(profilePicture);
     render.redBlueFilter(1.023, 40);
+    render.addVignette(gaussianImage);
     render.drawImage(logo, {globalCompositeOperation: "overlay", rect: cornerRect});
 
     $("#placeholder").fadeOut();
@@ -231,16 +249,20 @@ async function webcamInit() {
 
     const logo = await ImageLoader.fromURL("assets/hackoverlay.png");
     const cornerRect = new Rect(440 - 90, 10, 80, 80); // top right corner
+    const gaussianImage = await ImageLoader.fromURL("assets/gaussian-darker-medium.png");
 
     function frameLoop() {
         render.clear();
         render.drawImage(video);
         render.redBlueFilter(1.023, 0);
         // render.fillRect({color: "rgb(200, 200, 200)", globalCompositeOperation: "soft-light"});
+        render.addVignette(gaussianImage);
         render.drawImage(logo, {globalCompositeOperation: "overlay", rect: cornerRect});
 
         requestAnimationFrame(frameLoop);
     }
+
+    $("#text").css("margin-top", 0);
 
     $("#placeholder").fadeOut();
     $("#load-buttons").fadeOut();

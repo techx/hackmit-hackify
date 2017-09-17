@@ -4,7 +4,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var facebookInit = function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var canvas, render, profilePicture, logo;
+        var canvas, render, profilePicture, logo, gaussianImage;
         return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
                 switch (_context.prev = _context.next) {
@@ -23,9 +23,16 @@ var facebookInit = function () {
                         logo = _context.sent;
 
                         Rect.fromPercents(render.canvas.width, render.canvas.height, 0.75, 0.02, 0.22, 0.22); // top right corner
+                        _context.next = 11;
+                        return ImageLoader.fromURL("assets/gaussian-darker-medium.png");
+
+                    case 11:
+                        gaussianImage = _context.sent;
+
 
                         render.drawImage(profilePicture);
                         render.redBlueFilter(1.023, 40);
+                        render.addVignette(gaussianImage);
                         render.drawImage(logo, { globalCompositeOperation: "overlay", rect: cornerRect });
 
                         $("#placeholder").fadeOut();
@@ -39,7 +46,7 @@ var facebookInit = function () {
                         // Rerun function if the user toggles their faction
                         $("input[name=faction]").off("change").change(facebookInit);
 
-                    case 17:
+                    case 21:
                     case "end":
                         return _context.stop();
                 }
@@ -54,7 +61,7 @@ var facebookInit = function () {
 
 var webcamInit = function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-        var video, canvas, render, logo, cornerRect, frameLoop;
+        var video, canvas, render, logo, cornerRect, gaussianImage, frameLoop;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
             while (1) {
                 switch (_context2.prev = _context2.next) {
@@ -64,6 +71,7 @@ var webcamInit = function () {
                             render.drawImage(video);
                             render.redBlueFilter(1.023, 0);
                             // render.fillRect({color: "rgb(200, 200, 200)", globalCompositeOperation: "soft-light"});
+                            render.addVignette(gaussianImage);
                             render.drawImage(logo, { globalCompositeOperation: "overlay", rect: cornerRect });
 
                             requestAnimationFrame(frameLoop);
@@ -83,6 +91,15 @@ var webcamInit = function () {
                         logo = _context2.sent;
                         cornerRect = new Rect(440 - 90, 10, 80, 80); // top right corner
 
+                        _context2.next = 12;
+                        return ImageLoader.fromURL("assets/gaussian-darker-medium.png");
+
+                    case 12:
+                        gaussianImage = _context2.sent;
+
+
+                        $("#text").css("margin-top", 0);
+
                         $("#placeholder").fadeOut();
                         $("#load-buttons").fadeOut();
 
@@ -101,7 +118,7 @@ var webcamInit = function () {
 
                         requestAnimationFrame(frameLoop);
 
-                    case 16:
+                    case 20:
                     case "end":
                         return _context2.stop();
                 }
@@ -335,6 +352,23 @@ var Rendering = function () {
             this.ctx.putImageData(this.blended, 0, 0);
         }
     }, {
+        key: "addVignette",
+        value: function addVignette(gaussianImage) {
+            // let w = this.canvas.width;
+            // let h = this.canvas.height;
+            // let outerRadius = w * .5;
+            // let innerRadius = w * .2;
+            // let grd = this.ctx.createRadialGradient(w / 2, h / 2, innerRadius, w / 2, h / 2, outerRadius);
+            // // light blue
+            // grd.addColorStop(0, 'rgba(0,0,0,0)');
+            // // dark blue
+            // grd.addColorStop(1, 'rgba(0,0,0,' + alpha + ')');
+            // this.ctx.fillStyle = grd;
+            // this.ctx.fill();
+            var rect = Rect.fromPercents(this.canvas.width, this.canvas.height, -.1125, -.1125, 1.25, 1.25);
+            this.drawImage(gaussianImage, { globalCompositeOperation: "", rect: rect });
+        }
+    }, {
         key: "toDataURL",
         value: function toDataURL() {
             return this.canvas.toDataURL('image/png');
@@ -347,7 +381,7 @@ var Rendering = function () {
 function setTimer(cb, seconds) {
     $("#timer h1").text(seconds);
 
-    if (seconds > 0) {
+    if (secondbottoms > 0) {
         setTimeout(function () {
             return setTimer(cb, seconds - 1);
         }, 1000);
