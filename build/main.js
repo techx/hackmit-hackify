@@ -354,17 +354,6 @@ var Rendering = function () {
     }, {
         key: "addVignette",
         value: function addVignette(gaussianImage) {
-            // let w = this.canvas.width;
-            // let h = this.canvas.height;
-            // let outerRadius = w * .5;
-            // let innerRadius = w * .2;
-            // let grd = this.ctx.createRadialGradient(w / 2, h / 2, innerRadius, w / 2, h / 2, outerRadius);
-            // // light blue
-            // grd.addColorStop(0, 'rgba(0,0,0,0)');
-            // // dark blue
-            // grd.addColorStop(1, 'rgba(0,0,0,' + alpha + ')');
-            // this.ctx.fillStyle = grd;
-            // this.ctx.fill();
             var rect = Rect.fromPercents(this.canvas.width, this.canvas.height, -.1125, -.1125, 1.25, 1.25);
             this.drawImage(gaussianImage, { globalCompositeOperation: "", rect: rect });
         }
@@ -381,7 +370,7 @@ var Rendering = function () {
 function setTimer(cb, seconds) {
     $("#timer h1").text(seconds);
 
-    if (secondbottoms > 0) {
+    if (seconds > 0) {
         setTimeout(function () {
             return setTimer(cb, seconds - 1);
         }, 1000);
